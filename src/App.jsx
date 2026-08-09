@@ -2,20 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Heart, MapPin, Calendar } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const heroRef = useRef(null);
-  const storyRef = useRef(null);
-  const manRef = useRef(null);
-  const womanRef = useRef(null);
-  const dressRef = useRef(null);
-  const armRef = useRef(null);
-  const heartRef = useRef(null);
+  const heroContentRef = useRef(null);
+  const manifestoRef = useRef(null);
+  const galleryRef = useRef(null);
+  const detailsRef = useRef(null);
+  const rsvpRef = useRef(null);
 
   useEffect(() => {
+    // 1. Инициализация инерционного плавного скролла Lenis
     const lenis = new Lenis({
       duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -26,9 +26,11 @@ export default function App() {
     gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
-    gsap.to("#hero-content", {
-      y: -150,
+    // 2. Кинематографичный параллакс и зум главного экрана
+    gsap.to(heroContentRef.current, {
+      y: -120,
       opacity: 0,
+      scale: 0.95,
       scrollTrigger: {
         trigger: heroRef.current,
         start: "top top",
@@ -37,23 +39,76 @@ export default function App() {
       }
     });
 
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: storyRef.current,
-        start: "center center",
-        end: "+=2500",
-        pin: true,
-        scrub: 1,
-      }
+    // 3. Staggered Text Reveal для Манифеста
+    const manifestoElements = manifestoRef.current.querySelectorAll('.reveal-text');
+    manifestoElements.forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
     });
 
-    tl.to(manRef.current, { rotation: -5, transformOrigin: "bottom center", duration: 1 })
-      .to(womanRef.current, { rotation: 10, transformOrigin: "bottom center", duration: 1 }, "<")
-      .to(womanRef.current, { rotation: 360, transformOrigin: "center center", duration: 3 })
-      .to(dressRef.current, { attr: { d: "M160 210 C130 250, 90 320, 45 340 H355 C310 320, 270 250, 240 210 Z" }, duration: 3 }, "<")
-      .to(womanRef.current, { rotation: 22, x: 20, y: -10, duration: 1.5 })
-      .to(armRef.current, { attr: { d: "M200 140 Q 240 90, 280 55" }, duration: 1.5 }, "<")
-      .to(heartRef.current, { opacity: 1, scale: 1.3, duration: 1 }, "-=0.5");
+    // 4. Image Reveal с масками для галереи
+    const galleryImages = galleryRef.current.querySelectorAll('.gallery-item');
+    galleryImages.forEach((img) => {
+      gsap.fromTo(img,
+        { opacity: 0, scale: 0.9, y: 60 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.4,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: img,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
+    // 5. Появление блока деталей торжества
+    gsap.fromTo(detailsRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: detailsRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // 6. Финальное свечение и появление RSVP
+    gsap.fromTo(rsvpRef.current,
+      { opacity: 0, scale: 0.95 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 1.4,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: rsvpRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
 
     return () => {
       lenis.destroy();
@@ -62,89 +117,130 @@ export default function App() {
   }, []);
 
   return (
-    <div className="bg-[#FAFAFA] text-[#2F3E36] font-sans antialiased overflow-x-hidden selection:bg-[#B86F7D] selection:text-white">
-      <div className="fixed inset-0 z-[-1] pointer-events-none bg-[radial-gradient(circle,_#FAF9F6_0%,_#F3F3E9_100%)]" />
+    <div className="bg-[#1A1E1C] text-[#FAF9F6] font-sans antialiased overflow-x-hidden selection:bg-[#C5A880] selection:text-[#1A1E1C]">
+      {/* Глубокий премиальный фоновый градиент */}
+      <div className="fixed inset-0 z-[-1] pointer-events-none bg-[radial-gradient(circle_at_50%_20%,_#242B27_0%,_#1A1E1C_100%)]" />
 
-      {/* HERO SECTION */}
-      <section ref={heroRef} className="relative h-screen w-full flex flex-col items-center justify-center text-center bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/40 z-0" />
-        <div id="hero-content" className="relative z-10 text-white px-4">
-          <p className="text-xs md:text-sm tracking-[0.3em] uppercase mb-4 opacity-90 font-light">
+      {/* 1. HERO SCREEN */}
+      <section ref={heroRef} className="relative h-screen w-full flex flex-col items-center justify-center text-center bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-[#1A1E1C]/60 backdrop-blur-[3px] z-0" />
+        
+        <div ref={heroContentRef} className="relative z-10 px-4 max-w-5xl mx-auto">
+          <p className="text-xs md:text-sm tracking-[0.4em] uppercase mb-8 text-[#C5A880] font-light">
             Приглашение на свадьбу
           </p>
-          <h1 className="font-serif text-6xl md:text-8xl font-light tracking-wider leading-tight mb-2">
+          <h1 className="font-serif text-6xl md:text-9xl font-light tracking-wide leading-none mb-4 text-[#FAF9F6]">
             Сергей
           </h1>
-          <div className="font-serif italic text-[#B86F7D] text-5xl md:text-7xl my-2">&amp;</div>
-          <h1 className="font-serif text-6xl md:text-8xl font-light tracking-wider leading-tight">
+          <div className="font-serif italic text-[#C5A880] text-4xl md:text-6xl my-4">&amp;</div>
+          <h1 className="font-serif text-6xl md:text-9xl font-light tracking-wide leading-none text-[#FAF9F6]">
             Юлия
           </h1>
-          <p className="text-lg md:text-xl tracking-[0.2em] mt-10 font-light border-t border-white/30 pt-6 inline-block">
-            21 СЕНТЯБРЯ 2027
-          </p>
-        </div>
-      </section>
-
-      {/* STORY SECTION (WALTZ ANIMATION) */}
-      <section ref={storyRef} className="relative w-full h-screen flex items-center justify-between px-[6vw]">
-        <div className="w-[42%] z-10">
-          <h2 className="font-serif text-4xl md:text-6xl text-[#B86F7D] mb-6">Наша история</h2>
-          <p className="font-light leading-relaxed text-gray-700 text-lg mb-6">
-            В этот особенный день наши пути сплетаются в единый танец. Каждый шаг, каждый взгляд и каждое мгновение ведут нас к началу общей семейной истории.
-          </p>
-          <p className="font-light leading-relaxed text-gray-600">
-            Прокручивайте страницу вниз, чтобы увидеть, как оживает наш вальс.
-          </p>
-        </div>
-
-        <div className="w-[48%] h-[75vh] relative flex items-center justify-center bg-white/40 backdrop-blur-md rounded-3xl border border-[#B86F7D]/20 shadow-xl overflow-hidden">
-          <svg viewBox="0 0 400 400" className="w-full h-full max-w-sm text-[#B86F7D] overflow-visible">
-            <g ref={manRef} transform="translate(180, 200)">
-              <path d="M-5 10 L-15 90 H-28 L-12 20 Z" fill="currentColor" opacity="0.75" />
-              <path d="M-10 0 C-10 -15, 0 -22, 6 -22 C12 -22, 18 -15, 18 0 L12 65 H-10 Z" fill="currentColor" />
-              <circle cx="4" cy="-30" r="10" fill="currentColor" />
-              <path d="M12 25 L45 42 L35 52 L8 30 Z" fill="currentColor" />
-            </g>
-
-            <g ref={womanRef} style={{ transformOrigin: '190px 200px' }}>
-              <path ref={dressRef} d="M175 210 C155 250, 135 310, 100 330 H270 C235 310, 215 250, 195 210 Z" fill="currentColor" opacity="0.85" />
-              <path d="M185 130 C185 115, 190 110, 196 110 C202 110, 207 115, 207 130 L204 210 H188 Z" fill="currentColor" />
-              <circle cx="196" cy="98" r="10" fill="currentColor" />
-              <path ref={armRef} d="M200 140 Q 235 110, 255 85" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
-            </g>
-
-            <path ref={heartRef} d="M 200,110 C 200,95 170,85 170,100 C 170,115 200,135 200,145 C 200,135 230,115 230,100 C 230,85 200,95 200,110 Z" fill="currentColor" opacity="0" style={{ transformOrigin: '200px 110px' }} />
-          </svg>
-        </div>
-      </section>
-
-      {/* DETAILS SECTION */}
-      <section className="relative py-28 px-6 max-w-4xl mx-auto z-10">
-        <div className="bg-white/80 backdrop-blur-xl p-10 md:p-14 rounded-3xl shadow-sm text-center border border-gray-100">
-          <h2 className="font-serif text-4xl md:text-5xl text-[#2F3E36] mb-6">Детали торжества</h2>
-          <p className="font-serif text-3xl text-[#B86F7D] mb-3">Усадьба Братцево</p>
-          <p className="font-light text-gray-500 uppercase tracking-widest text-sm mb-6 flex items-center justify-center gap-2">
-            <Clock className="w-4 h-4 text-[#B86F7D]" /> Сбор гостей в 15:30
-          </p>
-          <p className="font-light text-gray-600 mb-10 max-w-xl mx-auto">
-            Мы с нетерпением ждем возможности отпраздновать этот день в кругу самых близких людей.
-          </p>
-          
-          <div className="w-full h-96 bg-gray-200 rounded-2xl overflow-hidden shadow-inner border border-gray-200">
-            <iframe src="https://yandex.ru/map-widget/v1/-/CTS1A2LP" width="100%" height="100%" frameBorder="0" allowFullScreen={true} style={{ border: 'none' }} title="Map" />
+          <div className="mt-16 inline-flex items-center gap-6 text-sm md:text-base tracking-[0.35em] font-light border-y border-[#C5A880]/30 py-4 px-10 text-[#FAF9F6]/90">
+            <span>21 СЕНТЯБРЯ 2027</span>
           </div>
         </div>
       </section>
 
-      {/* RSVP SECTION */}
-      <section className="relative py-32 px-6 text-center bg-white/60 backdrop-blur-md border-t border-[#B86F7D]/10 z-10">
-        <div className="max-w-xl mx-auto">
-          <h2 className="font-serif text-4xl md:text-5xl text-[#B86F7D] mb-6">Присутствие</h2>
-          <p className="font-light mb-10 text-gray-700">
-            Пожалуйста, подтвердите ваше присутствие, написав нам в Telegram. Будем счастливы разделить этот праздник с вами!
+      {/* 2. MANIFESTO / WELCOME */}
+      <section ref={manifestoRef} className="relative py-36 px-6 max-w-3xl mx-auto text-center">
+        <span className="reveal-text text-[#C5A880] text-xs uppercase tracking-[0.4em] block mb-6">Философия момента</span>
+        <h2 className="reveal-text font-serif text-3xl md:text-5xl font-light text-[#FAF9F6] mb-10 leading-snug">
+          «Истинная роскошь заключается в искренности чувств и разделенной тишине двоих.»
+        </h2>
+        <p className="reveal-text font-light text-[#FAF9F6]/70 text-lg leading-relaxed max-w-2xl mx-auto">
+          Этот день — не просто дата в календаре. Это эстетика нашей истории, обретшая форму. Мы приглашаем вас стать свидетелями рождения нашей семьи в атмосфере безупречного тепла и утонченности.
+        </p>
+      </section>
+
+      {/* 3. OUR MOMENTS (ГАЛЕРЕЯ / ИСТОРИЯ) */}
+      <section ref={galleryRef} className="relative py-28 px-6 max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-[#C5A880] text-xs uppercase tracking-[0.4em] block mb-3">Хроника чувств</span>
+          <h3 className="font-serif text-4xl md:text-5xl font-light text-[#FAF9F6]">Наши мгновения</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div className="gallery-item md:col-span-7 h-[480px] rounded-2xl overflow-hidden border border-[#C5A880]/20 relative group shadow-2xl">
+            <img 
+              src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" 
+              alt="Story 1" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1E1C]/80 via-transparent to-transparent opacity-60" />
+          </div>
+          
+          <div className="gallery-item md:col-span-5 space-y-4 md:pl-6">
+            <span className="text-[#C5A880] font-serif italic text-2xl">Глава первая</span>
+            <h4 className="font-serif text-3xl font-light text-[#FAF9F6]">Случайная встреча, изменившая всё</h4>
+            <p className="font-light text-[#FAF9F6]/70 leading-relaxed text-sm md:text-base">
+              В суете большого города наши пути пересеклись неожиданно, но совершенно естественно, будто мы всегда знали траекторию друг друга.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center mt-24">
+          <div className="gallery-item md:col-span-5 order-2 md:order-1 space-y-4 md:pr-6">
+            <span className="text-[#C5A880] font-serif italic text-2xl">Глава вторая</span>
+            <h4 className="font-serif text-3xl font-light text-[#FAF9F6]">Решение идти рядом</h4>
+            <p className="font-light text-[#FAF9F6]/70 leading-relaxed text-sm md:text-base">
+              Каждый новый рассвет вместе укреплял нас в вере, что впереди — долгая, наполненная смыслом и гармонией дорога.
+            </p>
+          </div>
+
+          <div className="gallery-item md:col-span-7 order-1 md:order-2 h-[480px] rounded-2xl overflow-hidden border border-[#C5A880]/20 relative group shadow-2xl">
+            <img 
+              src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1975&auto=format&fit=crop" 
+              alt="Story 2" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1E1C]/80 via-transparent to-transparent opacity-60" />
+          </div>
+        </div>
+      </section>
+
+      {/* 4. EVENT DETAILS (ЛОКАЦИЯ И ДЕТАЛИ) */}
+      <section className="relative py-32 px-6 max-w-4xl mx-auto">
+        <div ref={detailsRef} className="bg-[#222824]/80 backdrop-blur-xl p-10 md:p-16 rounded-3xl shadow-2xl text-center border border-[#C5A880]/20 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-[#C5A880] to-transparent" />
+          
+          <Calendar className="w-8 h-8 text-[#C5A880] mx-auto mb-6 opacity-90" />
+          <h2 className="font-serif text-4xl md:text-5xl font-light text-[#FAF9F6] mb-6">Детали торжества</h2>
+          
+          <div className="mb-10">
+            <p className="font-serif text-3xl text-[#C5A880] mb-2">Усадьба Братцево</p>
+            <p className="font-light text-[#FAF9F6]/60 uppercase tracking-widest text-sm flex items-center justify-center gap-2 mt-3">
+              <Clock className="w-4 h-4 text-[#C5A880]" /> Сбор гостей в 15:30
+            </p>
+          </div>
+
+          <p className="font-light text-[#FAF9F6]/70 mb-10 max-w-xl mx-auto leading-relaxed">
+            Мы позаботились о каждой детали, чтобы этот вечер оставил в ваших сердцах самое теплое послевкусие.
           </p>
-          <a href="https://t.me/sergey_nstrk" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-[#B86F7D] text-white px-10 py-4 rounded-full font-light tracking-widest hover:bg-[#a35e6c] transition-colors shadow-lg">
-            ПОДТВЕРДИТЬ В TELEGRAM <ArrowRight className="w-4 h-4" />
+          
+          <div className="w-full h-96 bg-[#1A1E1C] rounded-2xl overflow-hidden shadow-inner border border-[#C5A880]/20">
+            <iframe src="https://yandex.ru/map-widget/v1/-/CTS1A2LP" width="100%" height="100%" frameBorder="0" allowFullScreen={true} style={{ border: 'none', filter: 'invert(90%) hue-rotate(180deg) brightness(90%) contrast(90%)' }} title="Map" />
+          </div>
+        </div>
+      </section>
+
+      {/* 5. RSVP (ФИНАЛ) */}
+      <section className="relative py-36 px-6 text-center bg-[#1D2320]/60 backdrop-blur-md border-t border-[#C5A880]/20">
+        <div ref={rsvpRef} className="max-w-xl mx-auto">
+          <span className="text-[#C5A880] text-xs uppercase tracking-[0.4em] block mb-4">RSVP</span>
+          <h2 className="font-serif text-4xl md:text-6xl font-light text-[#FAF9F6] mb-6">Присутствие</h2>
+          <p className="font-light mb-12 text-[#FAF9F6]/70 leading-relaxed text-lg">
+            Ваше присутствие — самый ценный подарок для нас. Пожалуйста, подтвердите его до 1 августа 2027 года через Telegram.
+          </p>
+          
+          <a 
+            href="https://t.me/sergey_nstrk" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center gap-3 bg-[#C5A880] text-[#1A1E1C] px-12 py-5 rounded-full font-medium tracking-widest hover:bg-[#FAF9F6] transition-all duration-300 shadow-[0_0_30px_rgba(197,168,128,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] group"
+          >
+            ПОДТВЕРДИТЬ В TELEGRAM 
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </div>
       </section>
