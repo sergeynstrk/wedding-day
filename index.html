@@ -3,329 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Александр & Мария — Приглашение на свадьбу</title>
+    <title>Приглашение на свадьбу | Сергей и Юлия</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Подключаем шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Подключаем Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ivory': '#FAFAFA',
+                        'dusty-rose': '#B86F7D',
+                        'dark-text': '#2F3E36',
+                    },
+                    fontFamily: {
+                        'serif': ['"Cormorant Garamond"', 'serif'],
+                        'sans': ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: #2F4F4F;
-            background-color: #FFFFF0;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Cormorant Garamond', serif;
-            color: #C08081;
-            font-weight: 600;
-        }
-
-        .fixed-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: #FAFAFA; 
+            color: #2F3E36; 
             background-image: radial-gradient(circle, #FAF9F6 0%, #F5F5DC 100%);
+            background-attachment: fixed;
+        }
+        
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        section {
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            padding: 4rem 2rem;
-        }
-
-        .hero {
-            height: 100vh;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 6vw, 6rem);
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: clamp(1.2rem, 2vw, 1.8rem);
-            letter-spacing: 2px;
-        }
-
-        .story-section {
-            max-width: 1300px;
-            margin: 0 auto;
-            justify-content: space-between;
-            gap: 4rem;
-        }
-
-        .text-content {
-            width: 45%;
-            font-size: 1.15rem;
-            line-height: 1.8;
-        }
-        .text-content h2 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Контейнер для векторной анимации вальса */
-        .waltz-container {
-            width: 45%;
-            height: 70vh;
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            background: rgba(192, 128, 129, 0.05);
-            border: 1px solid rgba(192, 128, 129, 0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .waltz-svg {
-            width: 80%;
-            height: 80%;
-            overflow: visible;
-        }
-
-        /* RSVP Section */
-        .rsvp {
-            flex-direction: column;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.4);
-        }
-        .rsvp h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-        .rsvp p {
-            margin-bottom: 2.5rem;
-            font-size: 1.1rem;
-            color: #555;
-        }
-
-        .rsvp-form {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            font-weight: 500;
-        }
-
-        .form-group input, 
-        .form-group select {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 1px solid #D8B4B5;
-            border-radius: 8px;
-            background: #fff;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            color: #2F4F4F;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, 
-        .form-group select:focus {
-            border-color: #C08081;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 2rem;
-            margin-top: 0.5rem;
-        }
-
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .submit-btn {
-            background-color: #C08081;
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-family: 'Cormorant Garamond', serif;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            margin-top: 1rem;
-        }
-
-        .submit-btn:hover {
-            background-color: #A86D6E;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 900px) {
-            .story-section {
-                flex-direction: column;
-                padding: 4rem 1.5rem;
-                height: auto !important;
-            }
-            .text-content, .waltz-container {
-                width: 100%;
-            }
-            .waltz-container {
-                height: 50vh;
-            }
-        }
+        .bg-section { background-color: rgba(250, 250, 250, 0.85); backdrop-filter: blur(8px); }
+        .bg-white-section { background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
     </style>
 </head>
-<body>
+<body class="antialiased font-sans relative overflow-x-hidden">
 
-    <div class="fixed-bg"></div>
+    <!-- === ФОНОВАЯ СКРОЛЛ-АНИМАЦИЯ ВАЛЬСА (SVG) === -->
+    <div id="waltz-animation-container" class="fixed inset-0 z-0 pointer-events-none flex items-center justify-center opacity-40 overflow-hidden">
+        <svg viewBox="0 0 400 400" class="w-full h-full max-w-lg text-dusty-rose">
+            <!-- Силуэт партнера (опора в центре) -->
+            <g id="partner-man" transform="translate(180, 200)">
+                <path d="M-5 10 L-15 80 H-25 L-10 20 Z" fill="currentColor" opacity="0.7"/>
+                <path d="M-10 0 C-10 -15, 0 -20, 5 -20 C10 -20, 15 -15, 15 0 L10 60 H-10 Z" fill="currentColor"/>
+                <circle cx="2" cy="-28" r="9" fill="currentColor"/>
+                <path d="M10 20 L40 35 L30 45 L5 25 Z" fill="currentColor"/>
+            </g>
 
-    <section class="hero">
-        <div class="hero-text">
-            <h1>Александр & Мария</h1>
-            <p>23 Августа 2026</p>
+            <!-- Силуэт невесты (раскручивание / пируэт) -->
+            <g id="partner-woman" style="transform-origin: 190px 200px;">
+                <!-- Пышное платье, меняющее форму при вращении -->
+                <path id="dress" d="M170 210 C150 250, 130 310, 100 330 H260 C230 310, 210 250, 190 210 Z" fill="currentColor" opacity="0.8"/>
+                <!-- Торс и голова -->
+                <path d="M185 130 C185 115, 190 110, 195 110 C200 110, 205 115, 205 130 L202 210 H188 Z" fill="currentColor"/>
+                <circle cx="195" cy="98" r="9" fill="currentColor"/>
+                <!-- Рука вверх в финальной позе -->
+                <path id="woman-arm" d="M198 140 Q 220 110, 240 90" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </g>
+
+            <!-- Финальное сердце -->
+            <path id="waltz-heart" d="M 200,120 C 200,105 175,95 175,110 C 175,125 200,140 200,150 C 200,140 225,125 225,110 C 225,95 200,105 200,120 Z" fill="currentColor" opacity="0" style="transform-origin: 200px 120px; transition: opacity 0.2s ease-out;"/>
+        </svg>
+    </div>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="relative h-screen w-full flex flex-col items-center justify-center text-center hero-bg z-10">
+        <div class="absolute inset-0 bg-black/35 z-0"></div>
+        <div class="relative z-10 text-white fade-in px-4">
+            <p class="font-sans text-xs md:text-sm tracking-[0.3em] uppercase mb-4 opacity-90">
+                Мы женимся
+            </p>
+            <h1 class="font-serif text-6xl md:text-8xl font-light tracking-wider leading-tight mb-2">
+                Сергей
+            </h1>
+            <div class="font-serif italic text-dusty-rose text-5xl md:text-7xl my-2">&amp;</div>
+            <h1 class="font-serif text-6xl md:text-8xl font-light tracking-wider leading-tight">
+                Юлия
+            </h1>
+            <p class="font-sans text-lg md:text-xl tracking-[0.2em] mt-10 font-light border-t border-white/30 pt-6 inline-block">
+                21 СЕНТЯБРЯ 2027
+            </p>
         </div>
     </section>
 
-    <section class="story-section" id="story">
-        <div class="text-content">
-            <h2>Наша история</h2>
-            <p>Каждая история любви уникальна, но наша началась с простого взгляда. Проходя через годы, мы поняли, что вальс нашей жизни звучит в унисон.</p>
-            <br>
-            <p>Мы приглашаем вас разделить с нами этот особенный день, полный трепета, музыки и искренних эмоций. Прокручивайте страницу, чтобы увидеть танец.</p>
-        </div>
-        
-        <!-- Векторная анимация вальса (Стильные силуэты пары) -->
-        <div class="waltz-container">
-            <svg class="waltz-svg" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Партнер (опора) -->
-                <g id="partner" transform="translate(130, 200)">
-                    <path d="M-10 120 L-20 180 H-35 L-20 90 Z" fill="#2F4F4F" opacity="0.8"/> <!-- Ноги -->
-                    <path d="M-15 20 C-15 5, -5 0, 0 0 C5 0, 15 5, 15 20 L10 90 H-10 Z" fill="#2F4F4F"/> <!-- Торс -->
-                    <circle cx="0" cy="-10" r="12" fill="#2F4F4F"/> <!-- Голова -->
-                    <path d="M5 30 L45 50 L35 65 L0 45 Z" fill="#2F4F4F"/> <!-- Рука поддерживающая -->
-                </g>
-
-                <!-- Партнерша (девушка в вальсе, которая будет раскручиваться) -->
-                <g id="partner-girl" transform="translate(170, 210)">
-                    <!-- Пышное платье (будет менять форму при раскрутке) -->
-                    <path id="dress" d="M-25 10 C-30 60, -60 140, -80 160 H60 C40 140, 10 60, 5 10 Z" fill="#C08081" opacity="0.85"/>
-                    <!-- Торс -->
-                    <path d="M-5 15 C-5 5, -2 0, 0 0 C2 0, 5 5, 5 15 L5 80 H-5 Z" fill="#C08081"/>
-                    <!-- Голова -->
-                    <circle cx="0" cy="-6" r="10" fill="#C08081"/>
-                    <!-- Рука вверх в финальной позе -->
-                    <path id="girl-arm" d="M3 20 Q 30 -10, 45 -25" stroke="#C08081" stroke-width="4" stroke-linecap="round"/>
-                </g>
-            </svg>
-        </div>
-    </section>
-
-    <section class="rsvp" id="rsvp">
-        <h2>Ждем вас на празднике!</h2>
-        <p>Пожалуйста, подтвердите свое присутствие до 1 августа 2026 года.</p>
-
-        <form class="rsvp-form" onsubmit="event.preventDefault(); alert('Спасибо! Ответ отправлен.');">
-            <div class="form-group">
-                <label>Ваше имя и фамилия</label>
-                <input type="text" required placeholder="например, Алексей Смирнов">
+    <!-- СЕКЦИЯ: ТАЙМЕР И ИСТОРИЯ -->
+    <section class="relative py-24 px-6 max-w-4xl mx-auto text-center z-10 bg-section rounded-2xl shadow-sm my-12">
+        <div class="fade-in">
+            <h2 class="font-serif text-4xl md:text-5xl text-dusty-rose mb-6">Ждем с нетерпением</h2>
+            <p class="font-light leading-relaxed text-gray-700 mb-12 max-w-2xl mx-auto">
+                В этот день мы сделаем важный шаг и станем семьей. Мы будем невероятно счастливы разделить радость этого момента с самыми близкими нам людьми.
+            </p>
+            
+            <div id="countdown" class="flex justify-center gap-6 md:gap-12 border-y border-dusty-rose/20 py-8 relative bg-white/50 rounded-lg shadow-sm">
+                <div class="flex flex-col"><span id="days" class="font-serif text-4xl md:text-5xl">00</span><span class="text-xs uppercase tracking-widest text-gray-500 mt-2">Дней</span></div>
+                <div class="flex flex-col"><span id="hours" class="font-serif text-4xl md:text-5xl">00</span><span class="text-xs uppercase tracking-widest text-gray-500 mt-2">Часов</span></div>
+                <div class="flex flex-col"><span id="minutes" class="font-serif text-4xl md:text-5xl">00</span><span class="text-xs uppercase tracking-widest text-gray-500 mt-2">Минут</span></div>
             </div>
+        </div>
+    </section>
 
-            <div class="form-group">
-                <label>Сможете ли вы присутствовать?</label>
-                <div class="radio-group">
-                    <label class="radio-label"><input type="radio" name="presence" checked> С радостью приду</label>
-                    <label class="radio-label"><input type="radio" name="presence"> К сожалению, не смогу</label>
+    <!-- СЕКЦИЯ: ЛОКАЦИЯ (С ЯНДЕКС КАРТОЙ) -->
+    <section class="relative py-20 px-6 bg-white-section z-10 my-12 max-w-4xl mx-auto rounded-3xl shadow-sm">
+        <div class="max-w-3xl mx-auto text-center fade-in">
+            <h2 class="font-serif text-4xl md:text-5xl text-dark-text mb-8">Детали торжества</h2>
+            
+            <div class="p-8 border border-gray-100 rounded-2xl shadow-sm bg-ivory/95">
+                <h3 class="font-serif text-3xl text-dusty-rose mb-2">Усадьба Братцево</h3>
+                <p class="font-light text-gray-500 mb-6 uppercase tracking-widest text-sm">Сбор гостей в 15:30</p>
+                <p class="font-light text-gray-600 mb-8">
+                    Ниже вы можете проложить маршрут на карте, чтобы легко нас найти.
+                </p>
+                
+                <div class="w-full h-96 bg-gray-200 rounded-xl overflow-hidden relative shadow-inner z-20 border border-gray-200">
+                    <iframe src="https://yandex.ru/map-widget/v1/-/CTS1A2LP" 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            allowfullscreen="true" 
+                            style="border:none; position: relative;">
+                    </iframe>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label>Предпочтения по напиткам</label>
-                <select>
-                    <option>Красное вино</option>
-                    <option>Белое вино</option>
-                    <option>Крепкие напитки</option>
-                    <option>Безалкогольные напитки</option>
-                </select>
-            </div>
-
-            <button type="submit" class="submit-btn">Отправить ответ</button>
-        </form>
+        </div>
     </section>
 
-    <script src="https://unpkg.com/lenis@1.1.2/dist/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- СЕКЦИЯ: RSVP (ОТВЕТ ГОСТЯ) -->
+    <section id="rsvp-section" class="relative py-32 px-6 bg-section z-10 backdrop-blur-md border-t border-dusty-rose/10 text-center">
+        <div class="max-w-2xl mx-auto fade-in">
+            <h2 class="font-serif text-4xl md:text-5xl text-dusty-rose mb-6">Присутствие</h2>
+            <p class="font-light mb-10 text-gray-700">
+                Пожалуйста, подтвердите ваше присутствие, написав нам в Telegram.
+            </p>
+            
+            <a href="https://t.me/sergey_nstrk" target="_blank" class="inline-block bg-dusty-rose text-white px-8 py-4 rounded-full font-light tracking-widest hover:bg-[#a35e6c] transition-colors shadow-lg relative z-20">
+                ПОДТВЕРДИТЬ ПРИСУТСТВИЕ
+            </a>
+        </div>
+    </section>
 
+    <!-- СКРИПТЫ -->
     <script>
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true,
-        });
+        // 1. АНИМАЦИЯ ВАЛЬСА (ПИРУЭТ ДЕВУШКИ И СЕРДЦЕ) ПРИ ПРОКРУТКЕ
+        let ticking = false;
+        
+        function updateWaltzAnimation() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            
+            if (docHeight > 0) {
+                let scrollPercent = Math.max(0, Math.min(1, scrollTop / docHeight));
+                
+                // Девушка совершает пируэт: поворот от 0 до 360 градусов под скролл
+                let rotationDeg = scrollPercent * 360;
+                const womanGroup = document.getElementById('partner-woman');
+                womanGroup.style.transform = `rotate(${rotationDeg}deg)`;
 
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
+                // Плавное раскрытие платья при вращении
+                let dressPath = document.getElementById('dress');
+                if (scrollPercent > 0.4 && scrollPercent < 0.8) {
+                    dressPath.setAttribute('d', 'M160 210 C130 250, 90 310, 60 330 H320 C290 310, 250 250, 220 210 Z');
+                } else {
+                    dressPath.setAttribute('d', 'M170 210 C150 250, 130 310, 100 330 H260 C230 310, 210 250, 190 210 Z');
+                }
 
-        gsap.registerPlugin(ScrollTrigger);
+                // Появление сердца в самом конце страницы (перед RSVP)
+                const heart = document.getElementById('waltz-heart');
+                if (scrollPercent > 0.80) {
+                    let heartProgress = (scrollPercent - 0.80) / 0.20;
+                    heart.style.opacity = heartProgress;
+                    heart.style.transform = `scale(${0.6 + heartProgress * 0.4}) translateY(${-20 * heartProgress}px)`;
+                } else {
+                    heart.style.opacity = 0;
+                }
+            }
+            ticking = false;
+        }
 
-        // Анимация главного экрана
-        gsap.to(".hero-text", {
-            y: -100,
-            opacity: 0,
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true,
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateWaltzAnimation);
+                ticking = true;
             }
         });
+        
+        setTimeout(updateWaltzAnimation, 100);
 
-        // Сложнейший скролл-таймлайн для вальса и раскручивания девушки
-        let waltzTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#story",
-                start: "center center",
-                end: "+=2000", // Длина прокрутки анимации
-                pin: true,     // Закрепляем секцию, пока пара танцует
-                scrub: 1,      // Плавная привязка к скроллу
+        // 2. НАСТРОЙКА ТАЙМЕРА
+        const weddingDate = new Date(2027, 8, 21, 15, 30).getTime();
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
             }
-        });
+        }, 1000);
 
-        // Шаг 1: Пара делает шаг навстречу / наклоняется
-        waltzTl.to("#partner", { rotation: -5, transformOrigin: "bottom center", duration: 1 })
-               .to("#partner-girl", { rotation: 10, transformOrigin: "bottom center", duration: 1 }, "<")
+        // 3. ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ ПРИ СКРОЛЛЕ
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
 
-        // Шаг 2: Девушка начинает резкий пируэт (раскручивание)
-               .to("#partner-girl", { rotation: 360, transformOrigin: "center center", duration: 2 })
-               .to("#dress", { attr: { d: "M-45 10 C-70 50, -90 120, -110 150 H110 C90 120, 70 50, 45 10 Z" }, duration: 2 }, "<") // Платье разлетается веером
-
-        // Шаг 3: Финальная поза (голова запрокинута, рука вверху, замирание)
-               .to("#partner-girl", { rotation: 25, x: 20, y: -10, duration: 1 })
-               .to("#girl-arm", { attr: { d: "M3 20 Q 40 -20, 65 -40" }, duration: 1 }, "<");
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
     </script>
+
 </body>
 </html>
