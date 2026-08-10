@@ -290,11 +290,11 @@ export default function App() {
           <div className="glass-panel gallery__card" style={{ marginBottom: '2rem' }}>
             <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
               <img 
-                src="/images/story1.jpg" 
+                src={`${import.meta.env.BASE_URL}images/story1.jpg`} 
                 onError={(e) => {
                   if (!e.currentTarget.dataset.retried) {
                     e.currentTarget.dataset.retried = 'true';
-                    e.currentTarget.src = '/images/story1.png';
+                    e.currentTarget.src = `${import.meta.env.BASE_URL}images/story1.png`;
                   } else {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop';
                   }
@@ -321,11 +321,11 @@ export default function App() {
             </div>
             <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
               <img 
-                src="/images/story2.png" 
+                src={`${import.meta.env.BASE_URL}images/story2.png`} 
                 onError={(e) => {
                   if (!e.currentTarget.dataset.retried) {
                     e.currentTarget.dataset.retried = 'true';
-                    e.currentTarget.src = '/images/story2.jpg';
+                    e.currentTarget.src = `${import.meta.env.BASE_URL}images/story2.jpg`;
                   } else {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1975&auto=format&fit=crop';
                   }
@@ -338,11 +338,11 @@ export default function App() {
           <div className="glass-panel gallery__card">
             <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
               <img 
-                src="/images/story3.jpg" 
+                src={`${import.meta.env.BASE_URL}images/story3.jpg`} 
                 onError={(e) => {
                   if (!e.currentTarget.dataset.retried) {
                     e.currentTarget.dataset.retried = 'true';
-                    e.currentTarget.src = '/images/story3.png';
+                    e.currentTarget.src = `${import.meta.env.BASE_URL}images/story3.png`;
                   } else {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop';
                   }
