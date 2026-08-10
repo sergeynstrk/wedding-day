@@ -164,18 +164,24 @@ export default function EnvelopeScreen({ onOpenComplete }) {
           </svg>
         </div>
 
-        {/* 4. Верхний крышка-клапан с 3D-разворотом (z-30) */}
+        {/* 4. Верхний крышка-клапан с идеальным золоченым кантиком по всему периметру (z-30) */}
         <div 
           className="envelope-flap absolute top-0 left-0 w-full h-[68%] paper-texture-flap z-30 origin-top rounded-t-[22px]"
           style={{ 
-            clipPath: 'polygon(0 0, 100% 0, 100% 8%, 53% 97%, 50% 100%, 47% 97%, 0 8%)',
+            clipPath: 'polygon(0% 6%, 1% 3.5%, 3.5% 1%, 6% 0%, 94% 0%, 96.5% 1%, 99% 3.5%, 100% 6%, 100% 16%, 52.5% 96%, 50% 98.5%, 47.5% 96%, 0% 16%)',
             transformStyle: 'preserve-3d',
-            filter: 'drop-shadow(0 8px 18px rgba(40,10,15,0.35))'
+            filter: 'drop-shadow(0 6px 14px rgba(80,30,40,0.22))'
           }} 
         >
-          {/* Золотая нить по краю V-образного клапана */}
+          {/* Непрерывный золотой кантик по всему периметру клапана (включая верхние скругления) */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 68" preserveAspectRatio="none">
-            <polyline points="0,5.4 47,66 50,68 53,66 100,5.4" fill="none" stroke="#E5C578" strokeWidth="0.9" opacity="0.9" />
+            <path 
+              d="M 0,14 C 0,4 5,0 16,0 L 84,0 C 95,0 100,4 100,14 L 100,16 L 52.5,65.5 C 50.8,67 49.2,67 47.5,65.5 L 0,16 Z" 
+              fill="none" 
+              stroke="#E5C578" 
+              strokeWidth="1.25" 
+              opacity="0.95" 
+            />
           </svg>
         </div>
 
