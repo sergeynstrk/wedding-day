@@ -27,7 +27,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
       }
     });
 
-    // 1. Плавный отлет и растворение сургучной печати
+    // 1. Исчезновение сургучной печати (z-50)
     tl.to(".envelope-btn", { 
       opacity: 0, 
       scale: 0.45, 
@@ -43,14 +43,14 @@ export default function EnvelopeScreen({ onOpenComplete }) {
     })
     .set(".envelope-flap", { zIndex: 5 })
 
-    // 3. Выезд пригласительной карточки вверх из конверта
+    // 3. Выезд пригласительной карточки вверх из кармана (z-10)
     .to(".envelope-letter", {
       y: -135,
       duration: 0.85,
       ease: "power2.out"
     })
     
-    // 4. Плавное опускание конверта и внешней золотой каемки
+    // 4. Плавное опускание ВСЕХ элементов конверта и рамочного контура
     .to([".envelope-back", ".envelope-liner", ".envelope-front", ".envelope-flap", ".envelope-border"], {
       y: 480,
       opacity: 0,
@@ -68,7 +68,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
       ease: "power2.inOut"
     }, "+=1.1") 
     
-    // 6. Переход к главному сайту
+    // 6. Плавный переход к главному сайту
     .to(envelopeScreenRef.current, {
       opacity: 0,
       duration: 0.6,
@@ -129,7 +129,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
           </div>
         </div>
 
-        {/* 3. Передние карманы конверта - плотная непрозрачная бумага (z-20) */}
+        {/* 3. Передние карманы конверта - плотная непрозрачная бумага с единым контуром (z-20) */}
         <div className="envelope-front absolute inset-0 z-20 pointer-events-none rounded-none overflow-hidden">
           {/* Сплошная плотная подложка кармана */}
           <div 
@@ -148,15 +148,15 @@ export default function EnvelopeScreen({ onOpenComplete }) {
             }} 
           />
           
-          {/* Чистые сплошные швы конверта без пунктиров */}
+          {/* Единые сплошные швы конверта в точном стиле рамки приглашения (#D6C7B8, 1px) */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <line x1="0" y1="0" x2="50" y2="54" stroke="#E3DAD0" strokeWidth="0.6" opacity="0.9" />
-            <line x1="100" y1="0" x2="50" y2="54" stroke="#E3DAD0" strokeWidth="0.6" opacity="0.9" />
-            <polyline points="0,100 50,54 100,100" fill="none" stroke="#D8C8B8" strokeWidth="0.7" opacity="0.9" />
+            <line x1="0" y1="0" x2="50" y2="54" stroke="#D6C7B8" strokeWidth="1" opacity="0.85" />
+            <line x1="100" y1="0" x2="50" y2="54" stroke="#D6C7B8" strokeWidth="1" opacity="0.85" />
+            <polyline points="0,100 50,54 100,100" fill="none" stroke="#D6C7B8" strokeWidth="1" opacity="0.85" />
           </svg>
         </div>
 
-        {/* 4. Верхний крышка-клапан с аккуратными золотыми V-линиями (z-30) */}
+        {/* 4. Верхний крышка-клапан с V-линией в едином стиле с рамкой письма (z-30) */}
         <div 
           className="envelope-flap absolute top-0 left-0 w-full h-[68%] paper-texture-flap z-30 origin-top rounded-none"
           style={{ 
@@ -168,15 +168,15 @@ export default function EnvelopeScreen({ onOpenComplete }) {
           {/* Внутренняя шелковая подкладка клапана при открывании */}
           <div className="absolute inset-0 paper-texture-liner rounded-none opacity-95 pointer-events-none" />
 
-          {/* Золотая V-линия аккуратно начинается внутри уголочков */}
+          {/* Золотисто-бежевая V-линия в едином стиле с рамкой письма (#D6C7B8, 1px) */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 68" preserveAspectRatio="none">
-            <line x1="0" y1="0" x2="50" y2="54" stroke="#C5A059" strokeWidth="1.2" opacity="0.95" />
-            <line x1="100" y1="0" x2="50" y2="54" stroke="#C5A059" strokeWidth="1.2" opacity="0.95" />
+            <line x1="0" y1="0" x2="50" y2="54" stroke="#D6C7B8" strokeWidth="1" opacity="0.85" />
+            <line x1="100" y1="0" x2="50" y2="54" stroke="#D6C7B8" strokeWidth="1" opacity="0.85" />
           </svg>
         </div>
 
-        {/* 5. Главная непрерывная золотая рамочная каемка ПО ВСЕМ 4 СТОРОНАМ конверта (z-35) */}
-        <div className="envelope-border absolute inset-0 rounded-none border-2 border-[#C5A059] pointer-events-none z-35 shadow-[0_20px_45px_rgba(51,41,43,0.08)]" />
+        {/* 5. Главная непрерывная золотисто-бежевая рамочная каемка в едином стиле с рамкой письма (z-35) */}
+        <div className="envelope-border absolute inset-0 rounded-none border border-[#D6C7B8] pointer-events-none z-35 shadow-[0_20px_45px_rgba(51,41,43,0.08)]" />
 
         {/* 6. Элегантная печать "Пыльная Роза" с двумя сердцами без веточек и без пунктиров (z-50) */}
         <div className="envelope-btn absolute z-50 top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -205,11 +205,11 @@ export default function EnvelopeScreen({ onOpenComplete }) {
                 className="transition-colors duration-500 group-hover:fill-[#A36D67]"
               />
 
-              {/* 2. Чистая сплошная золотая кольцевая окантовка (без пунктира) */}
+              {/* 2. Чистая сплошная окантовка воска (без пунктира) */}
               <circle 
                 cx="100" cy="103" r="58" 
                 fill="none" 
-                stroke="#C5A059" 
+                stroke="#D6C7B8" 
                 strokeWidth="1.2" 
                 opacity="0.85" 
                 className="transition-opacity duration-500 group-hover:opacity-100"
