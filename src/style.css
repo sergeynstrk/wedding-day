@@ -345,42 +345,42 @@ body {
   filter: drop-shadow(0 8px 16px rgba(74, 0, 3, 0.4));
 }
 
-/* Нежно-розовая хлопковая текстура конверта (Lighter Dusty Rose Pink & Gold) */
+/* Текстура конверта в стиле пригласительного письма (Warm Ivory Milk Paper & Gold) */
 .paper-texture-back {
-  background-color: #D89B9E;
+  background-color: #FAF4F1;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.35) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.08) 0%, transparent 45%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.85  0 1 0 0 0.61  0 0 1 0 0.62  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(232, 216, 213, 0.35) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96  0 1 0 0 0.92  0 0 1 0 0.90  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
 }
 
 .paper-texture-flap {
-  background-color: #CF8F92;
+  background-color: #F7EDE9;
   background-image: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(0, 0, 0, 0.06) 100%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.81  0 1 0 0 0.56  0 0 1 0 0.58  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+    linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(225, 205, 200, 0.18) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.95  0 1 0 0 0.90  0 0 1 0 0.88  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
 }
 
 .paper-texture-side {
-  background-color: #C9878B;
+  background-color: #F4E7E3;
   background-image: 
-    linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(0, 0, 0, 0.08) 100%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.79  0 1 0 0 0.53  0 0 1 0 0.55  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(218, 195, 190, 0.22) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.94  0 1 0 0 0.88  0 0 1 0 0.86  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
 }
 
 .paper-texture-bottom {
-  background-color: #C37F83;
+  background-color: #F0E1DC;
   background-image: 
-    linear-gradient(0deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.76  0 1 0 0 0.50  0 0 1 0 0.51  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+    linear-gradient(0deg, rgba(255, 255, 255, 0.3) 0%, rgba(210, 185, 180, 0.25) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.92  0 1 0 0 0.85  0 0 1 0 0.83  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
 }
 
 /* Премиальный внутренний шелковый/золоченый лайнер конверта (Interior Envelope Liner) */
 .paper-texture-liner {
-  background-color: #FAF2F0;
+  background-color: #FAF4F1;
   background-image: 
-    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 70%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23C5A059' stroke-width='0.8' opacity='0.45'%3E%3Cpath d='M30 0 C35 15, 45 25, 60 30 C45 35, 35 45, 30 60 C25 45, 15 35, 0 30 C15 25, 25 15, 30 0 Z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23C5A059' opacity='0.35'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 50%, rgba(197, 160, 89, 0.1) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23C5A059' stroke-width='0.6' opacity='0.35'%3E%3Cpath d='M30 0 C35 15, 45 25, 60 30 C45 35, 35 45, 30 60 C25 45, 15 35, 0 30 C15 25, 25 15, 30 0 Z'/%3E%3Ccircle cx='30' cy='30' r='3' fill='%23C5A059' opacity='0.25'/%3E%3C/g%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='linerGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='3' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.98  0 1 0 0 0.94  0 0 1 0 0.93  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23linerGrain)'/%3E%3C/svg%3E");
 }
 
