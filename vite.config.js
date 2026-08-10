@@ -3,6 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // base убираем или ставим '/'
-  base: '/',
+  base: process.env.NODE_ENV === 'production' ? '/wedding-day/' : '/',
 })

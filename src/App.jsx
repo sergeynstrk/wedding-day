@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Clock, ArrowRight, Calendar, Sparkles, Gift, Users, CheckCircle2 } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { Clock, ArrowRight, Calendar, Sparkles, Gift, Users, CheckCircle2, Volume2, VolumeX, CalendarPlus } from 'lucide-react';
 import EnvelopeScreen from './EnvelopeScreen';
 import './style.css';
 
@@ -10,7 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef(null);
+
   // Refs
   const appContentRef = useRef(null);
   const heroRef = useRef(null);
@@ -29,14 +32,37 @@ export default function App() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   // Состояние для формы RSVP
-  const [rsvpForm, setRsvpForm] = useState({ name: '', attendance: 'yes', alcohol: 'Вино' });
+  const [rsvpForm, setRsvpForm] = useState({ name: '', attendance: 'yes', alcohol: 'Вино красное/белое' });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    if (isPlayingAudio) {
+      audioRef.current.pause();
+      setIsPlayingAudio(false);
+    } else {
+      audioRef.current.play().then(() => {
+        setIsPlayingAudio(true);
+      }).catch(() => {
+        setIsPlayingAudio(false);
+      });
+    }
+  };
 
   const handleRsvpSubmit = (e) => {
     e.preventDefault();
     if (!rsvpForm.name.trim()) return;
+    
     setIsSubmitted(true);
+    confetti({
+      particleCount: 80,
+      spread: 90,
+      origin: { y: 0.6 },
+      colors: ['#B57E78', '#D8A7A0', '#C5A059', '#FAF6F5']
+    });
   };
+
+  const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Свадьба+Сергея+и+Юлии&dates=20270921T123000Z/20270921T200000Z&details=Ждем+вас+на+нашем+торжестве!+Усадьба+Братцево.&location=Усадьба+Братцево,+Светлогорский+проезд,+13,+Москва";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -123,7 +149,7 @@ export default function App() {
     // --- 5. Появление секций ---
     sectionsRef.current.forEach((sec) => {
       gsap.fromTo(sec,
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 35 },
         {
           opacity: 1,
           y: 0,
@@ -172,15 +198,34 @@ export default function App() {
   ];
 
   const timelineEvents = [
-    { time: "15:30", title: "Сбор гостей и фуршет", desc: "Легкие напитки, музыка и приятные знакомства перед началом церемонии." },
+    { time: "15:30", title: "Сбор гостей и фуршет", desc: "Легкие напитки, живая музыка и приятные знакомства перед началом церемонии." },
     { time: "16:30", title: "Церемония бракосочетания", desc: "Самый трогательный и важный момент нашего дня, когда мы скажем друг другу «Да»." },
-    { time: "18:00", title: "Праздничный банкет", desc: "Изысканный ужин, душевные поздравления, танцы и сюрпризы." },
+    { time: "18:00", title: "Праздничный банкет", desc: "Изысканный ужин, душевные поздравления, танцы и живые выступления." },
     { time: "22:00", title: "Свадебный торт и финал", desc: "Сладкое завершение вечера и яркие эмоции под звездным небом." }
   ];
 
   return (
     <>
       <div className="page-background" />
+      <div className="paper-noise" />
+
+      {/* Фоновый аудиоплеер */}
+      <audio 
+        ref={audioRef} 
+        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-wedding-112199.mp3" 
+        loop 
+      />
+
+      {/* Плавающая кнопка музыки */}
+      {isOpen && (
+        <button
+          onClick={toggleAudio}
+          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-[#E8D8D5] shadow-lg flex items-center justify-center text-[#B57E78] transition-all hover:scale-110 active:scale-95 cursor-pointer"
+          title={isPlayingAudio ? "Выключить музыку" : "Включить музыку"}
+        >
+          {isPlayingAudio ? <Volume2 size={20} className="animate-pulse" /> : <VolumeX size={20} />}
+        </button>
+      )}
 
       {!isOpen && <EnvelopeScreen onOpenComplete={() => setIsOpen(true)} />}
 
@@ -198,7 +243,7 @@ export default function App() {
           <div className="hero__content container">
             <p className="subtitle" style={{ color: '#E6C7C2' }}>Приглашение на свадьбу</p>
             <h1 className="title-serif hero__name">Сергей</h1>
-            <div className="title-serif hero__ampersand">&amp;</div>
+            <div className="hero__ampersand">&amp;</div>
             <h1 className="title-serif hero__name">Юлия</h1>
             <div className="hero__date text-body" style={{ color: '#fff' }}>
               <span>21 СЕНТЯБРЯ 2027</span>
@@ -207,10 +252,10 @@ export default function App() {
         </section>
 
         {/* MANIFESTO */}
-        <section ref={addToRefs(sectionsRef)} className="container text-center" style={{ padding: '3.5rem 1rem 2rem' }}>
+        <section ref={addToRefs(sectionsRef)} className="container text-center" style={{ padding: '4.5rem 1rem 2.5rem' }}>
           <span className="subtitle">Философия момента</span>
           <h2 className="title-serif" style={{ fontSize: 'var(--fz-h2)', marginBottom: '1.5rem' }}>
-            «Истинная роскошь — это гармония в деталях и глубина искренних чувств.»
+            «Истинная роскошь — это гармония в деталях и глубина <span className="title-italic gold-gradient-text">искренних чувств</span>.»
           </h2>
           <p className="text-body" style={{ maxWidth: '800px', margin: '0 auto' }}>
             Этот день станет отражением нашей истории — утонченной, наполненной теплом и эстетикой. Мы будем счастливы разделить его с самыми близкими.
@@ -219,7 +264,7 @@ export default function App() {
 
         {/* LIVE COUNTDOWN */}
         <section ref={addToRefs(sectionsRef)} className="container text-center" style={{ padding: '1.5rem 1rem' }}>
-          <div className="glass-panel" style={{ padding: '2.5rem 2rem' }}>
+          <div className="glass-panel" style={{ padding: '3rem 2rem' }}>
             <span className="subtitle">До долгожданной встречи</span>
             <div className="countdown__grid">
               {Object.entries(timeLeft).map(([unit, value]) => {
@@ -244,27 +289,73 @@ export default function App() {
 
           <div className="glass-panel gallery__card" style={{ marginBottom: '2rem' }}>
             <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
-              <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" alt="Story 1" />
+              <img 
+                src="/images/story1.jpg" 
+                onError={(e) => {
+                  if (!e.currentTarget.dataset.retried) {
+                    e.currentTarget.dataset.retried = 'true';
+                    e.currentTarget.src = '/images/story1.png';
+                  } else {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop';
+                  }
+                }}
+                alt="Story 1" 
+              />
             </div>
             <div className="gallery__info">
-              <span className="title-serif" style={{ color: 'var(--c-accent)', fontSize: '1.5rem', fontStyle: 'italic' }}>Глава первая</span>
-              <h4 className="title-serif" style={{ fontSize: '2rem', margin: '0.75rem 0' }}>Случайная встреча, изменившая всё</h4>
+              <span className="title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.6rem' }}>Глава первая</span>
+              <h4 className="title-serif" style={{ fontSize: '2.2rem', margin: '0.75rem 0' }}>Случайная встреча, изменившая всё</h4>
               <p className="text-body">
                 В суете большого города наши пути пересеклись неожиданно, но совершенно естественно, будто мы всегда знали траекторию друг друга. С первого взгляда стало ясно — это начало чего-то большего.
               </p>
             </div>
           </div>
 
-          <div className="glass-panel gallery__card gallery__card--reverse">
+          <div className="glass-panel gallery__card gallery__card--reverse" style={{ marginBottom: '2rem' }}>
             <div className="gallery__info">
-              <span className="title-serif" style={{ color: 'var(--c-accent)', fontSize: '1.5rem', fontStyle: 'italic' }}>Глава вторая</span>
-              <h4 className="title-serif" style={{ fontSize: '2rem', margin: '0.75rem 0' }}>Решение идти рядом</h4>
+              <span className="title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.6rem' }}>Глава вторая</span>
+              <h4 className="title-serif" style={{ fontSize: '2.2rem', margin: '0.75rem 0' }}>Решение идти рядом</h4>
               <p className="text-body">
                 Каждый новый день вместе укреплял нас в вере, что впереди — долгая, наполненная смыслом и гармонией дорога. И теперь мы готовы сделать самый главный шаг.
               </p>
             </div>
             <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
-              <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1975&auto=format&fit=crop" alt="Story 2" />
+              <img 
+                src="/images/story2.png" 
+                onError={(e) => {
+                  if (!e.currentTarget.dataset.retried) {
+                    e.currentTarget.dataset.retried = 'true';
+                    e.currentTarget.src = '/images/story2.jpg';
+                  } else {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1975&auto=format&fit=crop';
+                  }
+                }}
+                alt="Story 2" 
+              />
+            </div>
+          </div>
+
+          <div className="glass-panel gallery__card">
+            <div className="gallery__img-wrapper" ref={addToRefs(imagesRef)}>
+              <img 
+                src="/images/story3.jpg" 
+                onError={(e) => {
+                  if (!e.currentTarget.dataset.retried) {
+                    e.currentTarget.dataset.retried = 'true';
+                    e.currentTarget.src = '/images/story3.png';
+                  } else {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop';
+                  }
+                }}
+                alt="Story 3" 
+              />
+            </div>
+            <div className="gallery__info">
+              <span className="title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.6rem' }}>Глава третья</span>
+              <h4 className="title-serif" style={{ fontSize: '2.2rem', margin: '0.75rem 0' }}>Впереди вся жизнь</h4>
+              <p className="text-body">
+                Мы счастливы открыть новую главу нашей истории и разделить каждый ее момент в любви, заботе и гармонии.
+              </p>
             </div>
           </div>
         </section>
@@ -279,10 +370,10 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               {timelineEvents.map((item, index) => (
-                <div key={index} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', borderBottom: index !== timelineEvents.length - 1 ? '1px solid var(--c-border)' : 'none', paddingBottom: index !== timelineEvents.length - 1 ? '1.5rem' : '0' }}>
-                  <span className="title-serif" style={{ color: 'var(--c-accent)', fontSize: '1.5rem', minWidth: '70px', fontWeight: 500 }}>{item.time}</span>
+                <div key={index} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', borderBottom: index !== timelineEvents.length - 1 ? '1px solid var(--c-border)' : 'none', paddingBottom: index !== timelineEvents.length - 1 ? '1.75rem' : '0' }}>
+                  <span className="title-serif title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.75rem', minWidth: '75px', fontWeight: 400 }}>{item.time}</span>
                   <div>
-                    <h4 className="title-serif" style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{item.title}</h4>
+                    <h4 className="title-serif" style={{ fontSize: '1.35rem', marginBottom: '0.4rem' }}>{item.title}</h4>
                     <p className="text-body" style={{ fontSize: '0.95rem' }}>{item.desc}</p>
                   </div>
                 </div>
@@ -318,9 +409,9 @@ export default function App() {
               ))}
             </div>
 
-            <div style={{ display: 'inline-block', padding: '0.75rem 1.5rem', borderRadius: '100px', border: '1px solid var(--c-border)', background: 'var(--c-bg-glow)' }}>
+            <div style={{ display: 'inline-block', padding: '0.75rem 1.75rem', borderRadius: '100px', border: '1px solid var(--c-border)', background: 'var(--c-bg-glow)' }}>
               <span className="text-body" style={{ fontSize: '0.85rem' }}>Выбранный оттенок: </span>
-              <span className="title-serif" style={{ color: 'var(--c-accent)', fontStyle: 'italic', fontSize: '1.1rem', marginLeft: '0.5rem' }}>
+              <span className="title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.2rem', marginLeft: '0.5rem' }}>
                 {selectedColor.name}
               </span>
             </div>
@@ -336,20 +427,31 @@ export default function App() {
             <h2 className="title-serif" style={{ fontSize: 'var(--fz-h3)', marginBottom: '1.25rem' }}>Детали торжества</h2>
             
             <div style={{ marginBottom: '1.5rem' }}>
-              <p className="title-serif" style={{ fontSize: '2rem', color: 'var(--c-accent)' }}>Усадьба Братцево</p>
+              <p className="title-serif" style={{ fontSize: '2.2rem', color: 'var(--c-accent)' }}>Усадьба Братцево</p>
+              <p className="text-body" style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.25rem' }}>г. Москва, Светлогорский проезд, д. 13</p>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
                 <Clock size={16} color="var(--c-accent)" />
                 <span className="subtitle" style={{ marginBottom: 0, letterSpacing: '0.2em' }}>Сбор гостей в 15:30</span>
               </div>
             </div>
 
-            <p className="text-body" style={{ maxWidth: '700px', margin: '0 auto 2.5rem' }}>
-              Мы позаботились о каждой детали, чтобы этот вечер оставил в ваших сердцах самое теплое послевкусие.
-            </p>
+            {/* Добавить в календарь */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <a
+                href={googleCalendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{ fontSize: '0.75rem', padding: '0.85rem 2rem' }}
+              >
+                <CalendarPlus size={16} />
+                <span>Добавить в Google Календарь</span>
+              </a>
+            </div>
             
-            <div style={{ width: '100%', height: '350px', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--c-border)', padding: '8px', background: '#fff' }}>
-              <div style={{ width: '100%', height: '100%', borderRadius: '12px', overflow: 'hidden' }}>
-                <iframe src="https://yandex.ru/map-widget/v1/-/CTS1A2LP" width="100%" height="100%" frameBorder="0" allowFullScreen={true} style={{ filter: 'grayscale(0.3) opacity(0.9) contrast(1.1)' }} title="Map" />
+            <div style={{ width: '100%', height: '360px', borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--c-border)', padding: '8px', background: '#fff' }}>
+              <div style={{ width: '100%', height: '100%', borderRadius: '14px', overflow: 'hidden' }}>
+                <iframe src="https://yandex.ru/map-widget/v1/-/CTS1A2LP" width="100%" height="100%" frameBorder="0" allowFullScreen={true} style={{ filter: 'grayscale(0.2) opacity(0.95) contrast(1.05)' }} title="Map" />
               </div>
             </div>
           </div>
@@ -379,12 +481,12 @@ export default function App() {
 
             {isSubmitted ? (
               <div style={{ padding: '2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                <CheckCircle2 size={48} color="var(--c-accent)" />
-                <h3 className="title-serif" style={{ fontSize: '1.75rem' }}>Спасибо за ответ!</h3>
+                <CheckCircle2 size={52} color="var(--c-accent)" />
+                <h3 className="title-serif" style={{ fontSize: '2rem' }}>Спасибо за ответ!</h3>
                 <p className="text-body">Мы записали ваш выбор и с нетерпением ждем встречи.</p>
               </div>
             ) : (
-              <form onSubmit={handleRsvpSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'left', maxWidth: '500px', margin: '0 auto' }}>
+              <form onSubmit={handleRsvpSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', textAlign: 'left', maxWidth: '520px', margin: '0 auto' }}>
                 <div>
                   <label className="subtitle" style={{ marginBottom: '0.5rem', display: 'block' }}>Ваши Фамилия и Имя</label>
                   <input 
@@ -393,31 +495,27 @@ export default function App() {
                     placeholder="Например: Александр и Анна Смирновы"
                     value={rsvpForm.name}
                     onChange={(e) => setRsvpForm({...rsvpForm, name: e.target.value})}
-                    style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid var(--c-border)', background: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-sans)', color: 'var(--c-text-main)', outline: 'none' }}
+                    style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid var(--c-border)', background: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-sans)', color: 'var(--c-text-main)', outline: 'none' }}
                   />
                 </div>
 
                 <div>
                   <label className="subtitle" style={{ marginBottom: '0.5rem', display: 'block' }}>Сможете ли вы присутствовать?</label>
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontFamily: 'var(--font-sans)', fontSize: '0.95rem', color: 'var(--c-text-main)' }}>
-                      <input 
-                        type="radio" 
-                        name="attendance" 
-                        checked={rsvpForm.attendance === 'yes'} 
-                        onChange={() => setRsvpForm({...rsvpForm, attendance: 'yes'})} 
-                      />
+                  <div className="rsvp-switch">
+                    <button
+                      type="button"
+                      className={`rsvp-switch-btn ${rsvpForm.attendance === 'yes' ? 'is-active' : ''}`}
+                      onClick={() => setRsvpForm({...rsvpForm, attendance: 'yes'})}
+                    >
                       С радостью буду(ем)
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontFamily: 'var(--font-sans)', fontSize: '0.95rem', color: 'var(--c-text-main)' }}>
-                      <input 
-                        type="radio" 
-                        name="attendance" 
-                        checked={rsvpForm.attendance === 'no'} 
-                        onChange={() => setRsvpForm({...rsvpForm, attendance: 'no'})} 
-                      />
-                      К сожалению, не смогу
-                    </label>
+                    </button>
+                    <button
+                      type="button"
+                      className={`rsvp-switch-btn ${rsvpForm.attendance === 'no' ? 'is-active' : ''}`}
+                      onClick={() => setRsvpForm({...rsvpForm, attendance: 'no'})}
+                    >
+                      Не смогу
+                    </button>
                   </div>
                 </div>
 
@@ -427,7 +525,7 @@ export default function App() {
                     <select 
                       value={rsvpForm.alcohol}
                       onChange={(e) => setRsvpForm({...rsvpForm, alcohol: e.target.value})}
-                      style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid var(--c-border)', background: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-sans)', color: 'var(--c-text-main)', outline: 'none' }}
+                      style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid var(--c-border)', background: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-sans)', color: 'var(--c-text-main)', outline: 'none' }}
                     >
                       <option value="Вино красное/белое">Красное / Белое вино</option>
                       <option value="Крепкие напитки">Крепкие напитки</option>
@@ -438,7 +536,7 @@ export default function App() {
                 )}
 
                 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                  <button type="submit" className="btn-primary" style={{ border: 'none', cursor: 'pointer' }}>
+                  <button type="submit" className="btn-primary" style={{ border: 'none', cursor: 'pointer', width: '100%' }}>
                     <span>Отправить ответ</span>
                     <ArrowRight size={18} />
                   </button>
@@ -449,14 +547,14 @@ export default function App() {
         </section>
 
         {/* FOOTER */}
-        <footer className="text-center glass-panel" style={{ borderRadius: '0', borderLeft: 'none', borderRight: 'none', borderBottom: 'none', padding: '3rem 1rem' }}>
+        <footer className="text-center glass-panel" style={{ borderRadius: '0', borderLeft: 'none', borderRight: 'none', borderBottom: 'none', padding: '3.5rem 1rem' }}>
           <div className="container">
             <Users size={24} style={{ margin: '0 auto 0.75rem', color: 'var(--c-accent)' }} />
             <span className="subtitle">Организационные вопросы</span>
             <p className="text-body" style={{ fontSize: '0.9rem', marginBottom: '0.5rem', maxWidth: '600px', margin: '0 auto 0.5rem' }}>
               Если в день свадьбы у вас возникнут вопросы или вы будете опаздывать, пожалуйста, свяжитесь с нашим свадебным координатором:
             </p>
-            <a href="https://t.me/coordinator_username" target="_blank" rel="noopener noreferrer" className="title-serif" style={{ color: 'var(--c-accent)', fontSize: '1.25rem', textDecoration: 'none', fontStyle: 'italic' }}>
+            <a href="https://t.me/coordinator_username" target="_blank" rel="noopener noreferrer" className="title-serif title-italic" style={{ color: 'var(--c-accent)', fontSize: '1.35rem', textDecoration: 'none' }}>
               Анастасия (Telegram)
             </a>
           </div>

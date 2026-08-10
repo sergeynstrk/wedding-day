@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
-
 :root {
   /* Цветовая палитра "Пыльная роза & Графит" */
   --c-bg: #FAF6F5;
@@ -8,20 +6,24 @@
   --c-text-muted: #6B5A5C;
   --c-accent: #B57E78;
   --c-accent-light: #D8A7A0;
+  --c-gold: #C5A059;
+  --c-gold-light: #E4C88A;
   --c-border: rgba(232, 216, 213, 0.6);
+  --c-border-gold: rgba(197, 160, 89, 0.3);
   
   /* Шрифты */
-  --font-serif: 'Playfair Display', serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Montserrat', sans-serif;
 
   /* Адаптивная типографика (clamp) */
   --fz-hero: clamp(3.5rem, 8vw, 7rem);
-  --fz-h2: clamp(2rem, 4vw, 3.5rem);
-  --fz-h3: clamp(1.75rem, 3vw, 2.5rem);
-  --fz-body: clamp(0.9rem, 1.5vw, 1.125rem);
+  --fz-h2: clamp(2.2rem, 4.5vw, 3.8rem);
+  --fz-h3: clamp(1.8rem, 3.2vw, 2.7rem);
+  --fz-body: clamp(0.95rem, 1.5vw, 1.15rem);
 
   /* Тайминги и кривые Безье для дорогих анимаций */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back-out: cubic-bezier(0.34, 1.56, 0.64, 1);
   --transition-slow: 0.7s var(--ease-out-expo);
   --transition-fast: 0.3s ease;
 }
@@ -40,25 +42,45 @@ body {
   color: #fff;
 }
 
-/* Глобальный фон с легким свечением */
+/* Глобальный фон с бумажным шумом и легким свечением */
 .page-background {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at 50% 0%, var(--c-bg-glow) 0%, var(--c-bg) 80%);
+  background: 
+    radial-gradient(circle at 50% 0%, var(--c-bg-glow) 0%, var(--c-bg) 80%);
   pointer-events: none;
+}
+
+.paper-noise {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* === UI КОМПОНЕНТЫ === */
 
-/* Glassmorphism Карточки */
+/* Glassmorphism Карточки с эффектным градиентным бордером */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--c-border);
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(51, 41, 43, 0.03), inset 0 1px 0 rgba(255,255,255,0.6);
+  border-radius: 28px;
+  box-shadow: 
+    0 20px 45px rgba(51, 41, 43, 0.04), 
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s ease;
+}
+
+.glass-panel:hover {
+  box-shadow: 
+    0 25px 55px rgba(181, 126, 120, 0.08), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 /* Типографика */
@@ -66,7 +88,7 @@ body {
   color: var(--c-accent);
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.45em;
   font-weight: 500;
   display: block;
   margin-bottom: 1rem;
@@ -75,8 +97,15 @@ body {
 .title-serif {
   font-family: var(--font-serif);
   font-weight: 300;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--c-text-main);
+  font-feature-settings: "liga" 1, "dlig" 1;
+}
+
+.title-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
 }
 
 .text-body {
@@ -84,7 +113,14 @@ body {
   font-weight: 300;
   color: var(--c-text-muted);
   font-size: var(--fz-body);
-  line-height: 1.8;
+  line-height: 1.85;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #B57E78 0%, #C5A059 50%, #D8A7A0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* === СЕКЦИИ === */
@@ -111,7 +147,7 @@ body {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(51, 41, 43, 0.3), rgba(51, 41, 43, 0.6));
+  background: linear-gradient(to bottom, rgba(51, 41, 43, 0.35), rgba(51, 41, 43, 0.65));
   z-index: 1;
 }
 
@@ -122,35 +158,41 @@ body {
   color: #fff;
 }
 
-/* Имена на первом экране в нежном пудрово-розовом оттенке */
+/* Имена на первом экране */
 .hero__name {
   color: #F7E1DE;
-  font-size: clamp(3rem, 7vw, 6rem);
-  line-height: 1.1;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 1.05;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+  font-weight: 300;
+  letter-spacing: -0.01em;
 }
 
 .hero__ampersand {
   color: #E6C7C2;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  margin: 0.5rem 0;
-  opacity: 0.9;
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  margin: 0.25rem 0;
+  font-style: italic;
+  font-family: var(--font-serif);
+  opacity: 0.95;
 }
 
 .hero .subtitle {
   color: #F3E9E7 !important;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
 }
 
 .hero__date {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   font-size: 0.85rem;
-  letter-spacing: 0.35em;
-  border-top: 1px solid rgba(255,255,255,0.2);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding: 1rem 2rem;
+  letter-spacing: 0.4em;
+  border-top: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  padding: 0.85rem 2.25rem;
   display: inline-block;
+  backdrop-filter: blur(4px);
+  border-radius: 100px;
 }
 
 /* Countdown */
@@ -165,18 +207,25 @@ body {
 }
 
 .countdown__item {
-  background: rgba(250, 246, 245, 0.7);
+  background: rgba(250, 246, 245, 0.75);
   border: 1px solid var(--c-border);
-  border-radius: 16px;
-  padding: 1.5rem 1rem;
+  border-radius: 20px;
+  padding: 1.75rem 1rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.countdown__item:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-accent-light);
 }
 
 .countdown__number {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3vw, 3rem);
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
   color: var(--c-text-main);
   display: block;
   margin-bottom: 0.25rem;
+  font-weight: 400;
 }
 
 /* Gallery (Хроника) */
@@ -186,7 +235,7 @@ body {
   gap: 2rem;
   align-items: center;
   padding: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 @media (min-width: 992px) {
   .gallery__card { grid-template-columns: 1fr 1fr; gap: 4rem; padding: 3.5rem; }
@@ -195,9 +244,11 @@ body {
 }
 
 .gallery__img-wrapper {
-  height: 450px;
-  border-radius: 16px;
+  height: 460px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 15px 35px rgba(51, 41, 43, 0.08);
+  position: relative;
 }
 
 .gallery__img-wrapper img {
@@ -205,48 +256,58 @@ body {
   height: 120%;
   object-fit: cover;
   transform-origin: center;
+  transition: filter 0.5s ease;
+}
+
+.gallery__img-wrapper:hover img {
+  filter: contrast(1.05) brightness(1.02);
 }
 
 /* Dress Code Buttons */
 .color-btn {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.75rem;
+  height: 3.75rem;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border: 3px solid #fff;
+  box-shadow: 0 6px 16px rgba(51,41,43,0.08);
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: transform 0.3s var(--ease-back-out), box-shadow 0.3s ease, border-color 0.3s ease;
 }
-.color-btn:hover { transform: translateY(-3px) scale(1.05); }
+.color-btn:hover { 
+  transform: translateY(-4px) scale(1.08); 
+  box-shadow: 0 12px 24px rgba(181, 126, 120, 0.2);
+}
 .color-btn.is-active {
   border-color: var(--c-text-main);
-  transform: scale(1.1);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transform: scale(1.15);
+  box-shadow: 0 12px 28px rgba(51, 41, 43, 0.2);
 }
 
-/* RSVP Button (Полностью без черной заливки) */
+/* RSVP Button */
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
-  background: var(--c-accent);
+  background: linear-gradient(135deg, #B57E78 0%, #A36D67 100%);
   color: #fff;
-  padding: 1.25rem 3rem;
+  padding: 1.25rem 3.25rem;
   border-radius: 100px;
   font-size: 0.85rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: var(--transition-fast);
-  box-shadow: 0 10px 30px rgba(181, 126, 120, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0 12px 32px rgba(181, 126, 120, 0.3);
   position: relative;
   margin: 0;
+  overflow: hidden;
 }
 
 .btn-primary:hover {
-  background: #a36d67;
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(181, 126, 120, 0.35);
+  background: linear-gradient(135deg, #a36d67 0%, #925c56 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(181, 126, 120, 0.4);
 }
 
 .btn-primary span, .btn-primary svg {
@@ -256,7 +317,94 @@ body {
 }
 
 .btn-primary:hover svg { 
-  transform: translateX(5px); 
+  transform: translateX(6px); 
+}
+
+/* 3D Organic Red Wax Seal (Сургучная печать по референсу) */
+.wax-seal {
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  perspective: 600px;
+}
+
+.wax-seal svg {
+  will-change: transform, filter;
+  filter: drop-shadow(0 14px 28px rgba(74, 0, 3, 0.45));
+}
+
+.wax-seal:hover svg {
+  transform: scale(1.07) rotate(2.5deg);
+  filter: drop-shadow(0 20px 38px rgba(74, 0, 3, 0.58));
+}
+
+.wax-seal:active svg {
+  transform: scale(0.96) rotate(-1deg);
+  filter: drop-shadow(0 8px 16px rgba(74, 0, 3, 0.4));
+}
+
+/* Авторская текстура французской хлопковой бумаги 350g/m² (French Rose Felt Cotton Paper) */
+.paper-texture-back {
+  background-color: #F7EAEA;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(232, 208, 212, 0.35) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96  0 1 0 0 0.89  0 0 1 0 0.91  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+}
+
+.paper-texture-flap {
+  background-color: #F4E4E6;
+  background-image: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(224, 195, 200, 0.2) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96  0 1 0 0 0.89  0 0 1 0 0.91  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+}
+
+.paper-texture-side {
+  background-color: #F1DFE2;
+  background-image: 
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(218, 188, 193, 0.25) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96  0 1 0 0 0.89  0 0 1 0 0.91  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+}
+
+.paper-texture-bottom {
+  background-color: #EDDADC;
+  background-image: 
+    linear-gradient(0deg, rgba(255, 255, 255, 0.3) 0%, rgba(212, 180, 186, 0.3) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='feltGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96  0 1 0 0 0.89  0 0 1 0 0.91  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23feltGrain)'/%3E%3C/svg%3E");
+}
+
+/* Custom Radio Switch for RSVP */
+.rsvp-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: rgba(239, 228, 225, 0.5);
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid var(--c-border);
+}
+
+.rsvp-switch-btn {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--c-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.rsvp-switch-btn.is-active {
+  background: #fff;
+  color: var(--c-text-main);
+  box-shadow: 0 4px 12px rgba(51, 41, 43, 0.08);
+  font-weight: 500;
 }
 
 /* Layout utilities */
@@ -265,7 +413,7 @@ body {
 .container-sm { max-width: 800px; margin: 0 auto; }
 .text-center { text-align: center; }
 
-/* Фиксы для магнитных кнопок палитры */
+/* Магнитные кнопки */
 .magnetic-wrapper {
   display: inline-block;
   position: relative;
