@@ -87,8 +87,8 @@ export default function EnvelopeScreen({ onOpenComplete }) {
         style={{ perspective: '1400px' }}
       >
         
-        {/* 1. Задняя стенка конверта (z-0) */}
-        <div className="envelope-back absolute inset-0 paper-texture-back rounded-[22px] border border-[#E3DAD0] shadow-[0_20px_45px_rgba(51,41,43,0.08)] z-0" />
+        {/* 1. Задняя стенка конверта с четкой золотой каемкой (z-0) */}
+        <div className="envelope-back absolute inset-0 paper-texture-back rounded-[22px] border-2 border-[#C5A059]/90 shadow-[0_20px_45px_rgba(51,41,43,0.1)] z-0" />
         
         {/* 1.1 Внутренний шелковый/золоченый лайнер кармана конверта (z-1) */}
         <div className="envelope-liner absolute inset-1.5 paper-texture-liner rounded-[18px] opacity-90 z-1 pointer-events-none" />
@@ -130,7 +130,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
         </div>
 
         {/* 3. Передние карманы конверта в стиле письма (z-20) */}
-        <div className="envelope-front absolute inset-0 z-20 pointer-events-none rounded-[22px] overflow-hidden">
+        <div className="envelope-front absolute inset-0 z-20 pointer-events-none rounded-[22px] overflow-hidden border-2 border-[#C5A059]/90">
           {/* Левый клапан */}
           <div 
             className="absolute inset-0 paper-texture-side" 
@@ -156,15 +156,18 @@ export default function EnvelopeScreen({ onOpenComplete }) {
             }} 
           />
           
-          {/* Тонкие изящные швы конверта */}
+          {/* Тонкие изящные швы и золотая внутренняя пунктирная окантовка */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {/* Деликатный внутренний золотой пунктирный кантик */}
+            <rect x="2.5" y="2.5" width="95" height="95" rx="5" ry="5" fill="none" stroke="#C5A059" strokeWidth="0.6" strokeDasharray="3 1.8" opacity="0.75" />
+
             <line x1="0" y1="0" x2="50" y2="54" stroke="#E3DAD0" strokeWidth="0.6" opacity="0.9" />
             <line x1="100" y1="0" x2="50" y2="54" stroke="#E3DAD0" strokeWidth="0.6" opacity="0.9" />
             <polyline points="0,100 50,54 100,100" fill="none" stroke="#D8C8B8" strokeWidth="0.7" opacity="0.9" />
           </svg>
         </div>
 
-        {/* 4. Верхний крышка-клапан в стиле письма с идеальной V-геометрией (z-30) */}
+        {/* 4. Верхний крышка-клапан с золотой каемкой (z-30) */}
         <div 
           className="envelope-flap absolute top-0 left-0 w-full h-[68%] paper-texture-flap z-30 origin-top rounded-t-[22px]"
           style={{ 
@@ -173,9 +176,9 @@ export default function EnvelopeScreen({ onOpenComplete }) {
             filter: 'drop-shadow(0 4px 10px rgba(51,41,43,0.08))'
           }} 
         >
-          {/* Золотая нить по краю V-образного клапана */}
+          {/* Золотая каемка по краю V-образного клапана */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 68" preserveAspectRatio="none">
-            <polyline points="0,0 50,54 100,0" fill="none" stroke="#C5A059" strokeWidth="0.8" opacity="0.85" />
+            <polyline points="0,0 50,54 100,0" fill="none" stroke="#C5A059" strokeWidth="1.2" opacity="0.9" />
           </svg>
         </div>
 
