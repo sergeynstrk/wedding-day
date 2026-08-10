@@ -6,39 +6,15 @@ export default function EnvelopeScreen({ onOpenComplete }) {
   const envelopeScreenRef = useRef(null);
   const envelopeBoxRef = useRef(null);
 
-  const handleMouseMove = (e) => {
-    if (!envelopeBoxRef.current) return;
-    const rect = envelopeBoxRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    
-    gsap.to(envelopeBoxRef.current, {
-      rotateY: (x / rect.width) * 12,
-      rotateX: (-y / rect.height) * 12,
-      duration: 0.6,
-      ease: "power2.out"
-    });
-  };
-
-  const handleMouseLeave = () => {
-    if (!envelopeBoxRef.current) return;
-    gsap.to(envelopeBoxRef.current, {
-      rotateY: 0,
-      rotateX: 0,
-      duration: 1,
-      ease: "elastic.out(1, 0.4)"
-    });
-  };
-
   const triggerConfetti = () => {
     confetti({
-      particleCount: 45,
-      spread: 70,
+      particleCount: 55,
+      spread: 80,
       origin: { y: 0.6 },
       colors: ['#B57E78', '#D8A7A0', '#C5A059', '#E4C88A', '#ffffff'],
-      ticks: 200,
-      gravity: 0.8,
-      scalar: 1.1
+      ticks: 220,
+      gravity: 0.75,
+      scalar: 1.15
     });
   };
 
@@ -51,47 +27,48 @@ export default function EnvelopeScreen({ onOpenComplete }) {
       }
     });
 
-    // 1. Убираем печать
+    // 1. Плавный отлет и растворение сургучной печати
     tl.to(".envelope-btn", { 
       opacity: 0, 
-      scale: 0.5, 
-      duration: 0.35, 
-      ease: "back.in(1.7)" 
+      scale: 0.45, 
+      duration: 0.4, 
+      ease: "back.in(1.8)" 
     })
-    // 2. Откидываем верхний клапан назад
+
+    // 2. Реалистичное откидывание верхнего клапана назад (180deg), открывающее внутренний лайнер
     .to(".envelope-flap", {
       rotateX: 180,
-      duration: 0.7,
+      duration: 0.75,
       ease: "power3.inOut"
     })
     .set(".envelope-flap", { zIndex: 5 })
 
-    // 3. Письмо выезжает вверх строго внутри кармана
+    // 3. Выезд пригласительной карточки вверх из кармана конверта
     .to(".envelope-letter", {
-      y: -120,
-      duration: 0.8,
+      y: -135,
+      duration: 0.85,
       ease: "power2.out"
     })
     
-    // 4. Конверт улетает вниз
-    .to([".envelope-back", ".envelope-front", ".envelope-flap"], {
-      y: 450,
+    // 4. Плавное опускание конверта
+    .to([".envelope-back", ".envelope-liner", ".envelope-front", ".envelope-flap"], {
+      y: 480,
       opacity: 0,
-      duration: 0.7,
+      duration: 0.75,
       ease: "power2.in"
     }, "+=0.1")
     
     .set(".envelope-letter", { zIndex: 40 })
 
-    // 5. Пауза и раскрытие письма
+    // 5. Раскрытие карточки приглашения на весь экран
     .to(".envelope-letter", {
-      scale: 2.1,
+      scale: 2.2,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.85,
       ease: "power2.inOut"
-    }, "+=1.2") 
+    }, "+=1.1") 
     
-    // 6. Открытие основной страницы
+    // 6. Переход к главному сайту
     .to(envelopeScreenRef.current, {
       opacity: 0,
       duration: 0.6,
@@ -102,26 +79,30 @@ export default function EnvelopeScreen({ onOpenComplete }) {
   return (
     <div 
       ref={envelopeScreenRef} 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#FAF6F5] px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#FAF6F5] px-4 overflow-hidden"
     >
       <div 
         ref={envelopeBoxRef}
         className="relative w-full max-w-xl h-[340px] md:h-[420px] transition-transform will-change-transform"
-        style={{ transformStyle: 'preserve-3d' }}
+        style={{ perspective: '1400px' }}
       >
         
         {/* 1. Задняя стенка конверта (z-0) */}
-        <div className="envelope-back absolute inset-0 paper-texture-back rounded-[22px] border border-[#D9B6BC] shadow-[0_18px_45px_rgba(51,41,43,0.1)] z-0" />
+        <div className="envelope-back absolute inset-0 paper-texture-back rounded-[22px] border border-[#D9B6BC] shadow-[0_20px_50px_rgba(51,41,43,0.12)] z-0" />
         
-        {/* 2. Карточка-письмо (z-10) */}
-        <div className="envelope-letter absolute left-[5%] right-[5%] bottom-3 top-3 bg-[#FCFCFA] rounded-2xl p-6 md:p-8 text-center flex flex-col justify-between items-center z-10 shadow-[0_10px_25px_rgba(0,0,0,0.07)] border border-[#EBE5DF]">
+        {/* 1.1 Внутренний шелковый/золоченый лайнер кармана конверта (z-1) */}
+        <div className="envelope-liner absolute inset-1.5 paper-texture-liner rounded-[18px] opacity-90 z-1 pointer-events-none" />
+
+        {/* 2. Карточка-приглашение (z-10) */}
+        <div className="envelope-letter absolute left-[5%] right-[5%] bottom-3 top-3 bg-[#FCFCFA] rounded-2xl p-6 md:p-8 text-center flex flex-col justify-between items-center z-10 shadow-[0_12px_28px_rgba(0,0,0,0.08)] border border-[#EBE5DF]">
           
+          {/* Декоративная тонкая рамка с золотыми уголочками */}
           <div className="absolute inset-2.5 md:inset-3.5 border border-[#E3DAD0] rounded-xl pointer-events-none flex flex-col justify-between p-3">
-            <div className="w-full flex justify-between opacity-40 text-[10px] text-[#8C7A6B]">
+            <div className="w-full flex justify-between opacity-50 text-[10px] text-[#C5A059]">
               <span>✦</span>
               <span>✦</span>
             </div>
-            <div className="w-full flex justify-between opacity-40 text-[10px] text-[#8C7A6B]">
+            <div className="w-full flex justify-between opacity-50 text-[10px] text-[#C5A059]">
               <span>✦</span>
               <span>✦</span>
             </div>
@@ -144,7 +125,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
 
           <div className="z-10 w-full flex flex-col items-center gap-1.5 mb-1">
             <div className="w-20 h-[1px] bg-[#E8D8D5]" />
-            <span className="text-[#C3A6A0] text-[10px] tracking-[0.3em] uppercase">S &amp; Y</span>
+            <span className="text-[#C3A6A0] text-[10px] tracking-[0.35em] font-medium uppercase">S &amp; Y</span>
           </div>
         </div>
 
@@ -175,7 +156,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
             }} 
           />
           
-          {/* Тончайшие золоченые контурные линии швов (Gold Leaf Thread) */}
+          {/* Золоченые линии швов конверта (Gold Leaf Threads) */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
             <line x1="0" y1="0" x2="49.5" y2="52" stroke="#D4AF37" strokeWidth="0.45" opacity="0.6" />
             <line x1="100" y1="0" x2="50.5" y2="52" stroke="#D4AF37" strokeWidth="0.45" opacity="0.6" />
@@ -183,7 +164,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
           </svg>
         </div>
 
-        {/* 4. Верхний крышка-клапан (z-30) */}
+        {/* 4. Верхний крышка-клапан с 3D-разворотом (z-30) */}
         <div 
           className="envelope-flap absolute top-0 left-0 w-full h-[68%] paper-texture-flap z-30 origin-top rounded-t-[22px]"
           style={{ 
@@ -198,14 +179,17 @@ export default function EnvelopeScreen({ onOpenComplete }) {
           </svg>
         </div>
 
-        {/* 5. Эксклюзивная сургучная печать Haute Couture (z-50) */}
+        {/* 5. Авторская сургучная печать с тиснением и веточками (z-50) */}
         <div className="envelope-btn absolute z-50 top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
           <button 
             onClick={handleOpenEnvelope}
             className="wax-seal group relative flex flex-col items-center justify-center cursor-pointer select-none border-none bg-transparent p-0 outline-none"
             title="Открыть приглашение"
           >
-            {/* Авторская SVG-печать с золотым тиснением и лавровым венком */}
+            {/* Тонкое свечение при наведении */}
+            <div className="absolute -inset-2.5 rounded-full bg-[#C5A059]/0 group-hover:bg-[#C5A059]/15 blur-md transition-all duration-500 pointer-events-none" />
+
+            {/* Авторская SVG-печать с золотой монограммой, веточками и сердцами */}
             <svg 
               viewBox="0 0 200 200" 
               className="w-28 h-28 md:w-32 md:h-32 filter drop-shadow-[0_10px_22px_rgba(70,25,35,0.22)] transition-all duration-500 ease-out group-hover:scale-106 group-hover:rotate-1 group-active:scale-95"
@@ -225,7 +209,7 @@ export default function EnvelopeScreen({ onOpenComplete }) {
                 className="transition-colors duration-500 group-hover:fill-[#8E3F44]"
               />
 
-              {/* 2. Тонкая филигранная кольцевая окантовка золотой фольгой */}
+              {/* 2. Золотая кольцевая пунктовка */}
               <circle 
                 cx="100" cy="103" r="58" 
                 fill="none" 
@@ -243,22 +227,22 @@ export default function EnvelopeScreen({ onOpenComplete }) {
                 className="transition-colors duration-500 group-hover:fill-[#7B3338]"
               />
 
-              {/* 4. Растительный лавровый веточный декор (Gold Leaf Laurel Sprigs) */}
-              <g stroke="#D4AF37" strokeWidth="1" fill="none" opacity="0.65" strokeLinecap="round">
+              {/* 4. Растительные лавровые веточки (Gold Leaf Laurel Sprigs) */}
+              <g stroke="#D4AF37" strokeWidth="1" fill="none" opacity="0.7" strokeLinecap="round">
                 {/* Левая ветвь */}
-                <path d="M 62,112 C 58,100 62,88 72,80" />
-                <circle cx="58" cy="100" r="1.2" fill="#D4AF37" />
-                <circle cx="62" cy="88" r="1.2" fill="#D4AF37" />
-                <circle cx="70" cy="80" r="1.2" fill="#D4AF37" />
+                <path d="M 60,114 C 55,100 60,86 72,78" />
+                <circle cx="56" cy="102" r="1.3" fill="#D4AF37" />
+                <circle cx="60" cy="90" r="1.3" fill="#D4AF37" />
+                <circle cx="68" cy="80" r="1.3" fill="#D4AF37" />
 
                 {/* Правая ветвь */}
-                <path d="M 138,112 C 142,100 138,88 128,80" />
-                <circle cx="142" cy="100" r="1.2" fill="#D4AF37" />
-                <circle cx="138" cy="88" r="1.2" fill="#D4AF37" />
-                <circle cx="130" cy="80" r="1.2" fill="#D4AF37" />
+                <path d="M 140,114 C 145,100 140,86 128,78" />
+                <circle cx="144" cy="102" r="1.3" fill="#D4AF37" />
+                <circle cx="140" cy="90" r="1.3" fill="#D4AF37" />
+                <circle cx="132" cy="80" r="1.3" fill="#D4AF37" />
               </g>
 
-              {/* 5. Изящное тиснение двух сердец (Champagne Gold Foil) */}
+              {/* 5. Две тисненые фигуры сердец (Champagne Gold Foil) */}
               <g strokeLinecap="round" strokeLinejoin="round">
                 {/* Левое сердце */}
                 <path 
@@ -288,10 +272,10 @@ export default function EnvelopeScreen({ onOpenComplete }) {
               </g>
             </svg>
 
-            {/* Драгоценная подпись "Открыть" с тонким золотистым кантиком */}
+            {/* Элегантная подпись "Нажмите, чтобы открыть" */}
             <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none transition-all duration-300 transform group-hover:translate-y-0.5 opacity-90 group-hover:opacity-100">
-              <span className="px-3.5 py-1 rounded-full bg-[#FAF6F5]/92 backdrop-blur-md text-[#6B5A5C] text-[10px] md:text-xs tracking-[0.3em] font-medium uppercase shadow-md border border-[#D4AF37]/35 group-hover:border-[#D4AF37]/70 group-hover:text-[#33292B] transition-colors">
-                Открыть
+              <span className="px-3.5 py-1.5 rounded-full bg-[#FAF6F5]/92 backdrop-blur-md text-[#6B5A5C] text-[9px] md:text-[10px] tracking-[0.25em] font-medium uppercase shadow-md border border-[#D4AF37]/35 group-hover:border-[#D4AF37]/70 group-hover:text-[#33292B] transition-colors">
+                Нажмите, чтобы открыть
               </span>
             </div>
           </button>
